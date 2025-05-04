@@ -1,4 +1,7 @@
 from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QAction, QLineEdit, QMessageBox
+from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import pyqtSlot
 import sys
 import subprocess
 import minecraft_launcher_lib
@@ -7,7 +10,7 @@ import os
 # Define the path to the natives (LWJGL libraries)
 natives_directory = f".minecraft/versions/1.21.1/natives"
 minecraft_directory = minecraft_launcher_lib.utils.get_minecraft_directory()
-version = "1.21.1"
+version = textboxValue
 
 # Install the Minecraft version if not already installed
 minecraft_launcher_lib.install.install_minecraft_version(version, minecraft_directory)
@@ -38,11 +41,16 @@ class LauncherWindow(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Modulus")
-        self.setGeometry(100, 100, 300, 200)
+        self.setGeometry(200, 200, 600, 400)
         self.setup_ui()
+        
 
     def setup_ui(self):
         layout = QtWidgets.QVBoxLayout()
+
+        self.textbox = QLineEdit(self)
+        self.textbox.move(20, 20)
+        self.textbox.resize(280,40)
 
         self.launch_button = QtWidgets.QPushButton("Launch")
         self.launch_button.clicked.connect(self.on_button_clicked)  # Connect the button click event
@@ -53,11 +61,15 @@ class LauncherWindow(QtWidgets.QWidget):
     def on_button_clicked(self):
         subprocess.call(minecraft_command)
 
+
+natives_directory = f".minecraft/versions/1.21.1/natives"
+minecraft_directory = minecraft_launcher_lib.utils.get_minecraft_directory()
+version = textboxValue, QMessageBox.Ok, QMessageBox.Ok
+
 # Initialize the application
 app = QtWidgets.QApplication(sys.argv)
 window = LauncherWindow()
 window.show()
 sys.exit(app.exec_())
-
 
 
