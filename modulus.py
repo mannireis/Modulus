@@ -1,7 +1,4 @@
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QAction, QLineEdit, QMessageBox
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import pyqtSlot
 import sys
 import subprocess
 import minecraft_launcher_lib
@@ -12,7 +9,12 @@ natives_directory = f".minecraft/versions/1.21.1/natives"
 minecraft_directory = minecraft_launcher_lib.utils.get_minecraft_directory()
 version = "1.21.1"
 
-# Install the Minecraft version if not already installed
+
+callback = {
+    "setStatus": lambda text: print(text)
+}
+minecraft_launcher_lib.fabric.install_fabric(version, minecraft_directory, callback=callback)
+
 minecraft_launcher_lib.install.install_minecraft_version(version, minecraft_directory)
 
 options = {
@@ -20,7 +22,7 @@ options = {
     "uuid": "00000000-0000-0000-0000-000000000000",
     "token": "",
     "executablePath": "/usr/bin/java",
-    # Force ARM64 LWJGL and disable Wayland
+
     "jvmArguments": [
         "-Dorg.lwjgl.librarypath=" + os.path.join(minecraft_directory, "versions", version, "natives"),
         "-Dorg.lwjgl.util.Debug=true",  # Debug LWJGL loading
@@ -29,16 +31,11 @@ options = {
     ],
 }
 
-callback = {
-    "setStatus": lambda text: print(text)
-}
 
 # Get the Minecraft launch command
 minecraft_command = minecraft_launcher_lib.command.get_minecraft_command(version, minecraft_directory, options)
-minecraft_launcher_lib.fabric.install_fabric(version, minecraft_directory, callback=callback)
 
-
-# Add the Java library path argument for LWJGL 
+# Add the Java library path argument for LWJGL (adjust the path if necessary)
 lwjgl_path = os.path.join(minecraft_directory, "versions", version, "natives")
 minecraft_command[2:2] = ["-Djava.library.path=" + lwjgl_path]
 
@@ -51,9 +48,10 @@ class LauncherWindow(QtWidgets.QWidget):
 
     def setup_ui(self):
         layout = QtWidgets.QVBoxLayout()
-        self.textbox = QLineEdit(self)
+
         self.launch_button = QtWidgets.QPushButton("Launch")
-        self.launch_button.clicked.connect(self.on_button_clicked)  
+        self.launch_button.clicked.connect(self.on_button_clicked)  # Connect the button click event
+        layout.addWidget(self.launch_button)
 
         self.setLayout(layout)
 
