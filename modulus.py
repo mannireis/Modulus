@@ -8,8 +8,8 @@ import minecraft_launcher_lib
 import os
 
 # Define the path to the natives (LWJGL libraries)
-natives_directory = f".config/modulus/natives"
-minecraft_directory = ".config/modulus/versions/"
+natives_directory = f".minecraft/versions/1.21.1/natives"
+minecraft_directory = minecraft_launcher_lib.utils.get_minecraft_directory()
 version = "1.21.1"
 
 # Install the Minecraft version if not already installed
@@ -38,7 +38,7 @@ minecraft_command = minecraft_launcher_lib.command.get_minecraft_command(version
 minecraft_launcher_lib.fabric.install_fabric(version, minecraft_directory, callback=callback)
 
 
-# Add the Java library path argument for LWJGL (adjust the path if necessary)
+# Add the Java library path argument for LWJGL 
 lwjgl_path = os.path.join(minecraft_directory, "versions", version, "natives")
 minecraft_command[2:2] = ["-Djava.library.path=" + lwjgl_path]
 
@@ -53,8 +53,7 @@ class LauncherWindow(QtWidgets.QWidget):
         layout = QtWidgets.QVBoxLayout()
         self.textbox = QLineEdit(self)
         self.launch_button = QtWidgets.QPushButton("Launch")
-        self.launch_button.clicked.connect(self.on_button_clicked)  # Connect the button click event
-        layout.addWidget(self.launch_button)
+        self.launch_button.clicked.connect(self.on_button_clicked)  
 
         self.setLayout(layout)
 
