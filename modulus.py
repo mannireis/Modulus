@@ -6,7 +6,7 @@ import sys
 
 
 
-class LauncherWindow(QtWidgets.QWidget):
+class LauncherWindow(QtWidgets.QWidget) :
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Modulus")
@@ -56,37 +56,25 @@ class LauncherWindow(QtWidgets.QWidget):
         self.setStyleSheet("background-color: #282A36;")
 
 
-    def setup_ui(self):
+    def setup_ui(self) :
         layout = QtWidgets.QVBoxLayout()
 
         self.selectver = QComboBox()
         self.selectver.addItems(['1.21.1', '1.21', '1.20.6', '1.20.5'])
 
-        self.modldr = QComboBox()
-        self.modldr.addItems(['Vanilla', 'Fabric', 'Forge'])
-
         self.launch_button = QtWidgets.QPushButton("Launch")
         self.launch_button.clicked.connect(self.on_button_clicked)  
 
         layout.addWidget(self.selectver)
-        layout.addWidget(self.modldr)
+
         layout.addWidget(self.launch_button)
 
 
         self.setLayout(layout)
 
-    def on_button_clicked(self):
+    def on_button_clicked(self) :
         print(f"Selected mod loader: {self.modldr.currentText()}")
         print(self.selectver.currentText())
-
-
-
-        if self.modldr.currentText() == 'Fabric':
-            print("this works FABRIC")
-        if self.modldr.currentText() == 'Forge':
-            print("this works FORGE ")
-        
-
 
         options = {
             "username": "Player",
