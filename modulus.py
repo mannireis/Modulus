@@ -3,9 +3,6 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QAc
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
 import sys
-import subprocess
-import minecraft_launcher_lib
-import os
 
 
 
@@ -81,23 +78,12 @@ class LauncherWindow(QtWidgets.QWidget):
     def on_button_clicked(self):
         print(f"Selected mod loader: {self.modldr.currentText()}")
         print(self.selectver.currentText())
-        natives_directory = f".minecraft/versions/1.21.1/natives" 
-        minecraft_directory = minecraft_launcher_lib.utils.get_minecraft_directory()
-        version = self.selectver.currentText()
-        forge_version = minecraft_launcher_lib.forge.find_forge_version(version)
 
 
-        callback = {
-            "setStatus": lambda text: print(text)
-        }
-
-        minecraft_launcher_lib.install.install_minecraft_version(version, minecraft_directory)
 
         if self.modldr.currentText() == 'Fabric':
-            minecraft_launcher_lib.fabric.install_fabric(version, minecraft_directory, callback=callback)
             print("this works FABRIC")
         if self.modldr.currentText() == 'Forge':
-            minecraft_launcher_lib.forge.install_forge_version(forge_version, minecraft_directory, callback=callback)
             print("this works FORGE ")
         
 
@@ -109,14 +95,6 @@ class LauncherWindow(QtWidgets.QWidget):
             "executablePath": "/usr/bin/java",
         }
 
-
-        # Get the Minecraft launch command
-        minecraft_command = minecraft_launcher_lib.command.get_minecraft_command(version, minecraft_directory, options)
-
-        # Add the Java library path argument for LWJGL
-        lwjgl_path = os.path.join(minecraft_directory, "versions", version, "natives")
-        minecraft_command[2:2] = ["-Djava.library.path=" + lwjgl_path]
-        subprocess.call(minecraft_command)
 
 # Initialize the application
 app = QtWidgets.QApplication(sys.argv)
